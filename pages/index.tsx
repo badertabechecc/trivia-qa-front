@@ -1,5 +1,4 @@
 import type { NextPage, NextPageContext } from 'next';
-
 import nookies from 'nookies';
 
 import Register from 'app/pages/register';
