@@ -4,8 +4,7 @@ import { Flex, Heading, Stack, Box, Center, VStack, Text, Button } from '@chakra
 
 import { checkAnswer } from 'app/api';
 import { IQuestions } from 'app/api/types';
-
-import Answer from '../../components/Answer';
+import Answer from 'app/components/Answer2';
 
 export interface IUserInfo {
   token: string;
