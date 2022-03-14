@@ -16,32 +16,17 @@ const Answer = (props: IAnswer) => {
   return (
     <Button
       onClick={() => handleClick()}
-      colorScheme={props.answerSelected === props.index ? 'green' : undefined}
-      variant='outline'
-      display='flex'
-      justifyContent='space-between'
-      _hover={{ bg: 'transparent' }}
-      _active={{
-        bg: 'transparent',
-        borderColor: 'green',
-        color: 'green',
-      }}
-      borderColor={
-        props.answerSelected === props.index ? 'green.500' : 'grey.700'
-      }
-      color={props.answerSelected === props.index ? 'green.500' : 'grey.700'}
+      colorScheme={props.answerSelected === props.index ? 'blue' : undefined}
+      variant={props.answerSelected === props.index ? 'solid' : 'outline'}
+      bg={props.answerSelected === props.index ? 'blue.400' : 'transparent'}
+      display="flex"
+      justifyContent="space-between"
     >
       {props.answer}
       {props.answerSelected === props.index ? (
-        <CheckCircleIcon color='green.500' />
+        <CheckCircleIcon color="white" />
       ) : (
-        <Box
-          height='16px'
-          width='16px'
-          borderRadius='999999'
-          border='1px'
-          borderColor='gray.700'
-        ></Box>
+        <Box height="16px" width="16px" borderRadius="999999" border="1px" borderColor="gray.700"></Box>
       )}
     </Button>
   );

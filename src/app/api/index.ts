@@ -9,6 +9,8 @@ interface IRegisterUser {
   name: string;
   lastName: string;
   phone: string;
+  position: string;
+  company: string;
 }
 
 interface ICheckAnswer {
@@ -20,13 +22,15 @@ interface ICheckAnswer {
   token: string;
 }
 
-export const registerUser = async ({ email, name, lastName, phone }: IRegisterUser) => {
+export const registerUser = async ({ email, name, lastName, phone, company, position }: IRegisterUser) => {
   const res = await API.post('/auth/local/register', {
     email,
     name,
     lastName,
     phone,
     username: name + lastName + phone,
+    company,
+    position,
   });
   return res.data;
 };

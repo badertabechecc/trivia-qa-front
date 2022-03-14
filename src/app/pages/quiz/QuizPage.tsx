@@ -4,7 +4,7 @@ import { Flex, Heading, Stack, Box, Center, VStack, Text, Button } from '@chakra
 
 import { checkAnswer } from 'app/api';
 import { IQuestions } from 'app/api/types';
-import Answer from 'app/components/answer';
+import Answer from 'app/components/Answer';
 
 export interface IUserInfo {
   token: string;
@@ -19,9 +19,12 @@ interface IProps {
   user: IUserInfo;
 }
 
-function Quiz(props: IProps) {
+const NUM_OF_QUESTIONS = 10;
+
+function Register(props: IProps) {
   const [answerSelected, setAnswerSelected] = useState<number | null>(null);
   const [page, setPage] = useState(0);
+  const [questionsAsked, setQuestionsAsked] = useState(props.user.numQuestion);
   const [user, setUser] = useState(props.user);
   const [isLoading, setLoading] = useState(false);
 
@@ -45,29 +48,26 @@ function Quiz(props: IProps) {
           questionsAsked: user.questionsAsked,
         });
         setLoading(false);
+        setQuestionsAsked(questionsAsked + 1);
+        setPage(page + 1);
+        setAnswerSelected(null);
       } catch (err) {
         console.error(err);
       }
     }
-
-    setAnswerSelected(null);
-    setPage(page + 1);
   };
 
   const selectAnswer = (num: number) => {
-    setAnswerSelected(num);
+    if (num === answerSelected) {
+      setAnswerSelected(null);
+    } else {
+      setAnswerSelected(num);
+    }
   };
 
-  if (page >= props.data.length) {
+  if (questionsAsked >= NUM_OF_QUESTIONS) {
     return (
-      <Flex
-        flexDirection="column"
-        width="100wh"
-        height="100vh"
-        backgroundColor="gray.700"
-        justifyContent="center"
-        alignItems="center"
-      >
+      <Flex flexDirection="column" width="100wh" height="100%" flex="2" justifyContent="center" alignItems="center">
         <Stack flexDir="column" mb="2" justifyContent="center" alignItems="center">
           <Box borderRadius="lg">
             <Stack
@@ -81,7 +81,7 @@ function Quiz(props: IProps) {
               <Center height="100%">
                 <VStack>
                   <Heading size="md" text-align="center">
-                    You scored {props.user.score}/{props.data.length}
+                    You scored {user.score}/{NUM_OF_QUESTIONS}
                   </Heading>
                   <p>Thanks for participating!</p>
                 </VStack>
@@ -97,30 +97,30 @@ function Quiz(props: IProps) {
     <Flex
       flexDirection="column"
       width="100wh"
-      height="100vh"
-      backgroundColor="gray.100"
+      height="100%"
       justifyContent="center"
       alignItems="center"
       color="gray.700"
+      flex="2"
     >
-      <Stack flexDir="column" mb="2" justifyContent="center" alignItems="center" spacing={3} w={['85%', '85%', 500]}>
+      <Stack
+        flexDir="column"
+        mb="2"
+        justifyContent="center"
+        alignItems="center"
+        spacing={3}
+        w={['85%', '85%', 500]}
+        backgroundColor="whiteAlpha.900"
+        boxShadow="md"
+        borderRadius="md"
+        pb={4}
+      >
         <Box borderRadius="lg" width="100%">
           <Stack spacing={4} p="1rem" borderRadius="md">
-            <Flex justifyContent="space-between" alignItems="center">
-              <Text fontWeight="bold" color="gray.600">
-                Question {page + 1}/{props.data.length}
+            <Flex justifyContent="space-between" alignItems="center" borderBottom="2px" borderColor="brand.500">
+              <Text fontWeight="bold" color="gray.600" py={2}>
+                Question {questionsAsked + 1}/{NUM_OF_QUESTIONS}
               </Text>
-              <Box
-                fontWeight="bold"
-                color="white"
-                paddingX="8px"
-                paddingY="2px"
-                borderRadius="full"
-                backgroundColor="blue.500"
-                width="fit-content"
-              >
-                01:30
-              </Box>
             </Flex>
             <Center>
               <Heading size="md" textAlign="center">
@@ -143,18 +143,24 @@ function Quiz(props: IProps) {
             ))}
           </Stack>
         </Box>
-        {page >= props.data.length - 1 ? (
-          <Button isLoading={isLoading} colorScheme="blue" onClick={handleNext}>
-            Submit
-          </Button>
-        ) : (
-          <Button isLoading={isLoading} colorScheme="blue" onClick={handleNext}>
-            Next
-          </Button>
-        )}
+        <Button
+          borderRadius="md"
+          type="submit"
+          variant="solid"
+          colorScheme="blue"
+          bg="brand.500"
+          isLoading={isLoading}
+          _hover={{ bg: 'blue.700' }}
+          _active={{
+            bg: 'blue.700',
+          }}
+          onClick={handleNext}
+        >
+          {page >= props.data.length - 1 ? 'Submit' : 'Next'}
+        </Button>
       </Stack>
     </Flex>
   );
 }
 
-export default Quiz;
+export default Register;
